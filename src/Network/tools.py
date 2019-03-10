@@ -16,7 +16,7 @@ def nodes_deviance(nodes):
                     (maximum outer node value - minimum outer node value)
     """
     # Get first key of nodes
-    first_key = nodes.keys()[0]
+    first_key = next(iter(nodes.keys()))
     # Set the min and max to a temp value
     node_min = nodes[first_key].get_outer()
     node_max = nodes[first_key].get_outer()

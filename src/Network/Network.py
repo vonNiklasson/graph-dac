@@ -1,5 +1,5 @@
-from Network.node import Node
-from Network import tools
+from .Node import Node
+from . import tools
 
 
 class Network:
