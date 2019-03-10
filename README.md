@@ -15,7 +15,7 @@ python cmd.py [graph] [deviance_threshold]
 
 ### Example usage:
 ```
-python master.py pentagon 0
+python cmd.py pentagon 0
 ```
 
 ## Example output  
