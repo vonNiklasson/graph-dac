@@ -1,3 +1,5 @@
+from queue import Queue
+
 from .Node import Node
 from . import tools
 
@@ -118,3 +120,37 @@ class Network:
                 return False, counter, deviance
 
         return True, counter, deviance
+
+    def is_graph_connected(self):
+        """
+        Assert that all nodes in the graph is connected to each other in some way.
+        
+        :return: True if all nodes are connected, otherwise False.
+        """
+        # Get the first item in the nodes
+        first_key = next(iter(self._nodes.keys()))
+        # Create a queue structure and visited list
+        queue = Queue()
+        visited = []
+        # Put the first node in the queue
+        queue.put(first_key)
+
+        # Iterate while there's still elements in the queue
+        while not queue.empty():
+            # Dequeue the next item and add it to visited
+            node = queue.get()
+            visited.append(node)
+
+            # Iterate over each neighbour
+            for neighbour in self._edges[node]:
+                # Make sure it's not already visited and add it to the queue
+                if neighbour not in visited:
+                    queue.put(neighbour)
+
+        # When we've iterated over connected node, make sure no node is unconnected
+        for node in self._nodes:
+            if node not in visited:
+                return False
+
+        # If we have reached here all nodes are connected.
+        return True

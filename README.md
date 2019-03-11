@@ -77,6 +77,10 @@ max iterations = 1000
 deviance       = 0.01
 ```
 
+It's also possible to assert that the graph is connected in one component through the function `network.is_graph_connected()`
+
+If it's not connected it's likely the network won't find a consensus.
+
 ### Actually solving the network
 
 In order to find a consensus you can use the `network.solve()` function. The `solve` 

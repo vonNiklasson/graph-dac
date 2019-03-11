@@ -1,8 +1,13 @@
-"""
-Get the average value of the given nodes.
-Can select which nodes should be used by giving node ids as the second argument.
-"""
+
 def nodes_average(nodes, ids=[]):
+    """
+    Get the average value of the given nodes.
+    Can select which nodes should be used by giving node ids as the second argument.
+
+    :param nodes:   The complete node structure to get the average of.
+    :param ids:     (optional) The ID's of the nodes to get the average of.
+    :return:        The average value of the given nodes.
+    """
     keys = list(nodes.keys()) if ids == [] else ids
     return sum([float(node.get_outer()) if key in keys else 0 for key, node in nodes.items()]) / len(keys)
 
@@ -45,20 +50,29 @@ def nodes_deviance_p(nodes):
     return deviance / average
 
 
-"""
-Update the nodes value to the average of its neighbours
-"""
 def update_node_average(nodes, edges, id):
-    # Make a new list of all the neighbouring ID's and its own ID
-    neighbour_ids = [id] + edges[id]
+    """
+    Update the nodes value to the average of its neighbours.
+
+    :param nodes:   The nodes to check on.
+    :param edges:   The edge structure of the nodes.
+    :param id:      The ID of the origin node to get the neighbours of.
+    """
+    if id in edges:
+        # Make a new list of all the neighbouring ID's and its own ID
+        neighbour_ids = [id] + edges[id]
+    else:
+        neighbour_ids = [id]
     # Get the average value of the neighbours and itself
     neighbour_average = nodes_average(nodes, neighbour_ids)
     # Update the inner value of the node
     nodes[id].update_value(neighbour_average)
 
+
 def print_nodes_values(nodes):
     for key, node in nodes.items():
         print(str(key) + ": " + str(node.get_inner()))
+
 
 def print_nodes_headers(nodes):
     row = str("ITER").rjust(5) + " |"
@@ -67,6 +81,7 @@ def print_nodes_headers(nodes):
     for key, _ in nodes.items():
         row += ("#" + str(key)).rjust(8) + " |"
     print(row)
+
 
 def print_node_values_row(iteration, nodes):
     row = str(iteration).rjust(5) + " |"

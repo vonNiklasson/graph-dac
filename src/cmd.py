@@ -25,6 +25,8 @@ network.set_deviance(deviance_threshold)
 network.add_edges(edges)
 network.add_nodes(nodes)
 
+print(network.is_graph_connected())
+
 result = network.solve(True)
 
 print("")
