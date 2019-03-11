@@ -25,7 +25,7 @@ network.set_deviance(deviance_threshold)
 network.add_edges(edges)
 network.add_nodes(nodes)
 
-result = network.solve()
+result = network.solve(True)
 
 print("")
 print("Solved:     " + str(result[0]))

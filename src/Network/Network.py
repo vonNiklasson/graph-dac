@@ -86,8 +86,8 @@ class Network:
             for end_node in end_nodes:
                 self.add_edge(start_node, end_node)
 
-    def solve(self, silent=False):
-        if not silent:
+    def solve(self, print_output=False):
+        if print_output:
             # Print the header and the initial state
             tools.print_nodes_headers(self._nodes)
             tools.print_node_values_row(0, self._nodes)
@@ -107,7 +107,7 @@ class Network:
             for _, node in self._nodes.items():
                 node.extract()
 
-            if not silent:
+            if print_output:
                 # Print each nodes current outer value
                 tools.print_node_values_row(counter, self._nodes)
 
