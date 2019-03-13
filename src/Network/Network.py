@@ -141,11 +141,12 @@ class Network:
             node = queue.get()
             visited.append(node)
 
-            # Iterate over each neighbour
-            for neighbour in self._edges[node]:
-                # Make sure it's not already visited and add it to the queue
-                if neighbour not in visited:
-                    queue.put(neighbour)
+            if node in self._edges:
+                # Iterate over each neighbour
+                for neighbour in self._edges[node]:
+                    # Make sure it's not already visited and add it to the queue
+                    if neighbour not in visited:
+                        queue.put(neighbour)
 
         # When we've iterated over connected node, make sure no node is unconnected
         for node in self._nodes:
