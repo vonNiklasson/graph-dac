@@ -1,27 +1,37 @@
 from GraphCreator import GraphCreator
+from Network import tools
+import graphs
 
-nodes = {
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6
-}
-max_edges = 8
+nodes = graphs.hossein["V"]
+edges = graphs.hossein["E"]
 
-edges = {}
+max_edges = tools.count_edges(edges) + 2
+
+
+print("----- Given -----")
+print()
+print("Nodes:")
+print(nodes)
+print()
+print("Edges:")
+print(edges)
+print()
+print()
 
 gc = GraphCreator()
 gc.add_nodes(nodes)
+gc.add_edges(edges)
 gc.set_max_edges(max_edges)
 
 result = gc.solve()
 
-print(result)
+
+print("----- Solutions -----")
+print()
 
 for edge_count, _ in result["iterations"].items():
     print("Best solution for " + str(edge_count) + " edges: " + str(result["iterations"][edge_count]))
     print("Deviance: " + str(result["deviances"][edge_count]))
+    print("Edges:")
     print(result["graphs"][edge_count])
     print()

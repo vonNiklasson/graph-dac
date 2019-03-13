@@ -111,6 +111,8 @@ def count_edges(edges):
             max_node = max(node_id, neighbour)
             # Check if there's an edge between the 2 nodes
             if not has_edge(single_edges, min_node, max_node):
+                if min_node not in single_edges:
+                    single_edges[min_node] = []
                 # If not, store only the minimum number of edges needed (remove bi-directional)
                 single_edges[min_node].append(max_node)
                 # Add one edge to the counter

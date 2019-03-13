@@ -1,6 +1,6 @@
 import copy
 
-from Network import Network
+from Network import Network, tools
 
 
 class GraphCreator:
@@ -39,7 +39,17 @@ class GraphCreator:
             # Adds them one by one
             self.add_node(node_id, node_value)
 
+    def add_edges(self, edges):
+        self._edges = edges
+
     def solve(self):
+        """
+        Generates a complicated dictionary with the final edge list which yields the minimum number of iterations
+        to find the distributed average consensus.
+
+        :return:    A dictionary of solutions.
+        :rtype:     dict
+        """
         # Store the minimum and maximum edges required to find a solution
         min_edges = len(self._nodes) - 1
         if self._max_edges == -1:
@@ -47,32 +57,36 @@ class GraphCreator:
         else:
             max_edges = self._max_edges
 
-        # Create a network object
+        # Copy the given edges to a new list
+        edges = copy.deepcopy(self._edges)
+
+        # Create a new network object
         network = Network()
         network.add_nodes(self._nodes)
         network.set_max_iterations(100)
         network.set_deviance(0.1)
 
+        # Count the number of bidirectional edges.
+        current_edge_count = tools.count_edges(edges)
+
         # Store a graph list with possible solutions
         graph_list = {}
         optimal_graph_list = {}
         deviance_graph_list = {}
-        for edge_count in range(min_edges, max_edges+1):
-            graph_list[edge_count] = None
+        for possible_edge_count in range(min_edges, max_edges+1):
+            graph_list[possible_edge_count] = None
             # Set a large number to compare to later
-            optimal_graph_list[edge_count] = float('inf')
-            deviance_graph_list[edge_count] = float('inf')
+            optimal_graph_list[possible_edge_count] = float('inf')
+            deviance_graph_list[possible_edge_count] = float('inf')
 
-        # Get the smallest and largest number of nodes
-        max_node = next(iter(self._nodes.keys()))
+        # Get the smallest and largest id of the nodes
         min_node = next(iter(self._nodes.keys()))
+        max_node = next(iter(self._nodes.keys()))
 
         # Iterate over all nodes to find the largest and smallest node id
         for temp_node_id, _ in self._nodes.items():
-            max_node = max(max_node, temp_node_id)
             min_node = min(min_node, temp_node_id)
-
-        edges = self._edges
+            max_node = max(max_node, temp_node_id)
 
         def dfs(node_id, neighbour_id, edge_count):
             # If we're trying to create an edge from an unexisting node, don't bother
@@ -93,17 +107,22 @@ class GraphCreator:
                 dfs(node_id + 1, node_id + 2, edge_count)
 
                 if neighbour_id in self._nodes:
-
                     # Iterate over all increasing neighbours
                     for next_node, _ in self._nodes.items():
                         # Make sure that the next node id is greater than the current node
                         if next_node >= neighbour_id:
+                            # Make sure that it doesn't already exists and edge there.
+                            # If there would already be an edge, it's supposed to be there and won't be deleted.
+                            if tools.has_edge(edges, node_id, next_node):
+                                continue
+
                             # Add edge between node_id and next_node
                             edges[node_id].append(next_node)
                             # Iterate over next adding neighbour
                             dfs(node_id, next_node + 1, edge_count + 1)
                             # Remove that neighbour and try with another one
                             edges[node_id].remove(next_node)
+
             elif edge_count >= min_edges:
                 # Add the proposed edges in the network
                 network.add_edges(edges)
@@ -119,7 +138,7 @@ class GraphCreator:
                         graph_list[edge_count] = copy.deepcopy(edges)
                 network.reset_edges()
 
-        dfs(min_node, min_node + 1, 0)
+        dfs(min_node, min_node + 1, current_edge_count)
 
         return {
             "iterations": optimal_graph_list,
