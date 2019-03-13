@@ -102,10 +102,10 @@ The function will also return a resulting value which has 3 properties.
 ```python
 result = network.solve()
 
-result[0] # True/False: True if a consensus was found, otherwise False.
-result[1] # Integer: Number of iterations that has been stepped through. 
-          # Will at maximum be <max_iterations> + 1
-result[2] # Float: The deviance of the last iteration.
+result["success"]       # True/False: True if a consensus was found, otherwise False.
+result["iterations"]    # Integer: Number of iterations that has been stepped through.
+                        # Will at maximum be <max_iterations> + 1
+result["deviance"]      # Float: The deviance of the last iteration.
 ```
 
 ## How to use by command

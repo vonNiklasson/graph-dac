@@ -121,7 +121,11 @@ class Network:
             if counter > self.__max_iterations:
                 return False, counter, deviance
 
-        return True, counter, deviance
+        return {
+            "success": True,
+            "iterations": counter,
+            "deviance": deviance
+        }
 
     def is_graph_connected(self):
         """

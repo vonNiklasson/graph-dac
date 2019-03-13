@@ -72,6 +72,8 @@ class GraphCreator:
             max_node = max(max_node, temp_node_id)
             min_node = min(min_node, temp_node_id)
 
+        edges = self._edges
+
         def dfs(node_id, neighbour_id, edge_count):
             # If we're trying to create an edge from an unexisting node, don't bother
             if node_id not in self._nodes:
@@ -82,8 +84,8 @@ class GraphCreator:
                 return
 
             # Make sure that the node id exists in the edge dict
-            if node_id not in self._edges:
-                self._edges[node_id] = []
+            if node_id not in edges:
+                edges[node_id] = []
 
             # We don't want to iterate over the last node
             if node_id < max_node:
@@ -97,26 +99,30 @@ class GraphCreator:
                         # Make sure that the next node id is greater than the current node
                         if next_node >= neighbour_id:
                             # Add edge between node_id and next_node
-                            self._edges[node_id].append(next_node)
+                            edges[node_id].append(next_node)
                             # Iterate over next adding neighbour
                             dfs(node_id, next_node + 1, edge_count + 1)
                             # Remove that neighbour and try with another one
-                            self._edges[node_id].remove(next_node)
+                            edges[node_id].remove(next_node)
             elif edge_count >= min_edges:
                 # Add the proposed edges in the network
-                network.add_edges(self._edges)
+                network.add_edges(edges)
                 # Make sure the graph is corrected
                 if network.is_graph_connected():
                     # Solve the problem
                     result = network.solve()
                     # If the new result yields a better result, store it instead
-                    if result[1] < optimal_graph_list[edge_count] or \
-                        (result[1] == optimal_graph_list[edge_count] and result[2] < deviance_graph_list[edge_count]):
-                        optimal_graph_list[edge_count] = result[1]
-                        deviance_graph_list[edge_count] = result[2]
-                        graph_list[edge_count] = copy.deepcopy(self._edges)
+                    if result["iterations"] < optimal_graph_list[edge_count] or \
+                        (result["iterations"] == optimal_graph_list[edge_count] and result["deviance"] < deviance_graph_list[edge_count]):
+                        optimal_graph_list[edge_count] = result["iterations"]
+                        deviance_graph_list[edge_count] = result["deviance"]
+                        graph_list[edge_count] = copy.deepcopy(edges)
                 network.reset_edges()
 
         dfs(min_node, min_node + 1, 0)
 
-        return optimal_graph_list, deviance_graph_list, graph_list
+        return {
+            "iterations": optimal_graph_list,
+            "deviances": deviance_graph_list,
+            "graphs": graph_list
+        }

@@ -18,8 +18,10 @@ gc.set_max_edges(max_edges)
 
 result = gc.solve()
 
-for max_edge_count, solution in result[0].items():
-    print("Best solution for " + str(max_edge_count) + " edges: " + str(solution))
-    print("Deviance: " + str(result[1][max_edge_count]))
-    print(result[2][max_edge_count])
+print(result)
+
+for edge_count, _ in result["iterations"].items():
+    print("Best solution for " + str(edge_count) + " edges: " + str(result["iterations"][edge_count]))
+    print("Deviance: " + str(result["deviances"][edge_count]))
+    print(result["graphs"][edge_count])
     print()
