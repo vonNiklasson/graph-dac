@@ -1,5 +1,8 @@
 import copy
-from queue import Queue
+try:
+    from queue import Queue
+except ImportError:
+    import Queue
 
 from .Node import Node
 from . import tools
@@ -136,7 +139,11 @@ class Network:
         # Get the first item in the nodes
         first_key = next(iter(self._nodes.keys()))
         # Create a queue structure and visited list
-        queue = Queue()
+        queue = None
+        try:
+            queue = Queue()
+        except:
+            queue = Queue.Queue()
         visited = []
         # Put the first node in the queue
         queue.put(first_key)
