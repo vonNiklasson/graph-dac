@@ -9,14 +9,14 @@ max_edges = tools.count_edges(edges) + 2
 
 
 print("----- Given -----")
-print()
+print("")
 print("Nodes:")
 print(nodes)
-print()
+print("")
 print("Edges:")
 print(edges)
-print()
-print()
+print("")
+print("")
 
 gc = GraphCreator()
 gc.add_nodes(nodes)
@@ -27,11 +27,11 @@ result = gc.solve()
 
 
 print("----- Solutions -----")
-print()
+print("")
 
 for edge_count, _ in result["iterations"].items():
     print("Best solution for " + str(edge_count) + " edges: " + str(result["iterations"][edge_count]))
     print("Deviance: " + str(result["deviances"][edge_count]))
     print("Edges:")
     print(result["graphs"][edge_count])
-    print()
+    print("")
