@@ -50,14 +50,18 @@ class GraphCreator:
         # Create a network object
         network = Network()
         network.add_nodes(self._nodes)
+        network.set_max_iterations(100)
+        network.set_deviance(0.1)
 
         # Store a graph list with possible solutions
         graph_list = {}
         optimal_graph_list = {}
+        deviance_graph_list = {}
         for edge_count in range(min_edges, max_edges+1):
             graph_list[edge_count] = None
             # Set a large number to compare to later
             optimal_graph_list[edge_count] = float('inf')
+            deviance_graph_list[edge_count] = float('inf')
 
         # Get the smallest and largest number of nodes
         max_node = next(iter(self._nodes.keys()))
@@ -99,14 +103,20 @@ class GraphCreator:
                             # Remove that neighbour and try with another one
                             self._edges[node_id].remove(next_node)
             elif edge_count >= min_edges:
+                # Add the proposed edges in the network
                 network.add_edges(self._edges)
+                # Make sure the graph is corrected
                 if network.is_graph_connected():
+                    # Solve the problem
                     result = network.solve()
-                    if result[1] < optimal_graph_list[edge_count]:
+                    # If the new result yields a better result, store it instead
+                    if result[1] < optimal_graph_list[edge_count] or \
+                        (result[1] == optimal_graph_list[edge_count] and result[2] < deviance_graph_list[edge_count]):
                         optimal_graph_list[edge_count] = result[1]
+                        deviance_graph_list[edge_count] = result[2]
                         graph_list[edge_count] = copy.deepcopy(self._edges)
                 network.reset_edges()
 
         dfs(min_node, min_node + 1, 0)
 
-        return optimal_graph_list, graph_list
+        return optimal_graph_list, deviance_graph_list, graph_list

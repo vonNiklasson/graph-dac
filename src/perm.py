@@ -4,9 +4,11 @@ nodes = {
     1: 1,
     2: 2,
     3: 3,
-    4: 4
+    4: 4,
+    5: 5,
+    6: 6
 }
-max_edges = 6
+max_edges = 8
 
 edges = {}
 
@@ -18,5 +20,6 @@ result = gc.solve()
 
 for max_edge_count, solution in result[0].items():
     print("Best solution for " + str(max_edge_count) + " edges: " + str(solution))
-    print(result[1][max_edge_count])
+    print("Deviance: " + str(result[1][max_edge_count]))
+    print(result[2][max_edge_count])
     print()
