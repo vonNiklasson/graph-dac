@@ -69,6 +69,56 @@ def update_node_average(nodes, edges, id):
     nodes[id].update_value(neighbour_average)
 
 
+def has_edge(edges, origin, dest):
+    """
+    Checks if there's an edge between 2 nodes.
+
+    :param edges:   The set of edges to check from.
+    :param origin:  The origin node.
+    :param dest:    The destination node.
+    :return:        True if there's an edge between origin and dest, otherwise False.
+    """
+    if origin in edges:
+        if dest in edges[origin]:
+            return True
+    if dest in edges:
+        if origin in edges[dest]:
+            return True
+    return False
+
+
+def count_edges(edges):
+    """
+    Counts the number of edges in the graph and excludes bidirectional edges.
+
+    :param edges:   The edges in the graph to count
+    :type edges:    dict[int, list[int]]
+    :return:        The number of edges in the graph (single-directional).
+    :rtype:         int
+    """
+
+    # Normalised edges (non-bidirectional)
+    single_edges = {}  # type: dict[int, list[int]]
+    # Create an edge counter
+    edge_count = 0  # type: int
+
+    # Iterate over each node in the edge list
+    for node_id, neighbours in edges.items():
+        # Iterate over each neighbour
+        for neighbour in neighbours:
+            # Sort out the maximum and minimum node id
+            min_node = min(node_id, neighbour)
+            max_node = max(node_id, neighbour)
+            # Check if there's an edge between the 2 nodes
+            if not has_edge(single_edges, min_node, max_node):
+                # If not, store only the minimum number of edges needed (remove bi-directional)
+                single_edges[min_node].append(max_node)
+                # Add one edge to the counter
+                edge_count = edge_count + 1
+
+    return edge_count
+
+
 def print_nodes_values(nodes):
     for key, node in nodes.items():
         print(str(key) + ": " + str(node.get_inner()))
