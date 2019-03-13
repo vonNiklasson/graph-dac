@@ -1,3 +1,4 @@
+import copy
 from queue import Queue
 
 from .Node import Node
@@ -89,13 +90,14 @@ class Network:
                 self.add_edge(start_node, end_node)
 
     def solve(self, print_output=False):
+        nodes = copy.deepcopy(self._nodes)
         if print_output:
             # Print the header and the initial state
-            tools.print_nodes_headers(self._nodes)
-            tools.print_node_values_row(0, self._nodes)
+            tools.print_nodes_headers(nodes)
+            tools.print_node_values_row(0, nodes)
 
         counter = 0
-        deviance = tools.nodes_deviance(self._nodes)
+        deviance = tools.nodes_deviance(nodes)
 
         # Continue while the deviance is larger than a certain value
         while deviance > self.__deviance:
@@ -103,18 +105,18 @@ class Network:
             counter += 1
 
             # Iterate through each item and update its value
-            for id in self._nodes:
-                tools.update_node_average(self._nodes, self._edges, id)
+            for id in nodes:
+                tools.update_node_average(nodes, self._edges, id)
             # Move the inner value to the outer value
-            for _, node in self._nodes.items():
+            for _, node in nodes.items():
                 node.extract()
 
             if print_output:
                 # Print each nodes current outer value
-                tools.print_node_values_row(counter, self._nodes)
+                tools.print_node_values_row(counter, nodes)
 
             # Calculate teh deviance
-            deviance = tools.nodes_deviance(self._nodes)
+            deviance = tools.nodes_deviance(nodes)
 
             if counter > self.__max_iterations:
                 return False, counter, deviance
@@ -155,3 +157,6 @@ class Network:
 
         # If we have reached here all nodes are connected.
         return True
+
+    def reset_edges(self):
+        self._edges.clear()
