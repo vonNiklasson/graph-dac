@@ -1,4 +1,8 @@
 import copy
+import random
+
+from .Edge import Edge
+
 try:
     from queue import Queue
 except ImportError:
@@ -46,7 +50,13 @@ class Network:
         :param node_id:     The ID of the node.
         :param node_value:  The initial value of the node.
         """
-        self._nodes[node_id] = Node(node_value)
+
+        # TODO: Implement coordinates for real
+        from random import randint
+        c_x = randint(0, 100)
+        c_y = randint(0, 100)
+
+        self._nodes[node_id] = Node(node_id, node_value, (c_x, c_y))
 
     def add_nodes(self, nodes):
         """
@@ -75,6 +85,7 @@ class Network:
         # Checks if the destination node is in the set of neighbours for origin node.
         if dest not in self._edges[origin]:
             # If not, adds it.
+            edge = Edge.from_nodes(origin, dest)
             self._edges[origin].append(dest)
 
         # Checks if the destination node is in the set of edges.
