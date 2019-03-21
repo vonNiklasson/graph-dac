@@ -1,6 +1,6 @@
 import copy
 
-from Network import Network, tools
+from Graph import Network, tools
 
 
 class GraphCreator:

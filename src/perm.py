@@ -1,5 +1,5 @@
 from GraphCreator import GraphCreator
-from Network import tools
+from Graph import tools
 import graphs
 
 nodes = graphs.hossein["V"]

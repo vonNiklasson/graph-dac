@@ -1,6 +1,6 @@
 import graphs
 import sys
-from Network import Network
+from Graph import Network
 
 if len(sys.argv) > 1:
     figure = getattr(graphs, sys.argv[1])
