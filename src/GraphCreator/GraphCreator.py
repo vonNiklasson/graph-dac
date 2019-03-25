@@ -1,4 +1,5 @@
 import copy
+import networkx as nx
 
 from Graph import Network, tools
 
