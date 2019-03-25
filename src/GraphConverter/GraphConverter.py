@@ -1,6 +1,8 @@
 import networkx as nx
 import random
 import numpy
+
+
 class GraphConverter:
 
     def __init__(self, netx):
@@ -8,7 +10,13 @@ class GraphConverter:
 
     @classmethod
     def from_dict(cls, g):
-        netx = nx.Graph()
+        """
+
+        :param g:
+        :return:
+        :rtype: networkx.Graph
+        """
+        netx = nx.Graph()  # type: nx.Graph
         nodes = g["V"]
         edges = g["E"]
 
@@ -23,7 +31,7 @@ class GraphConverter:
         for node in netx.nodes(data=True):
             print node
         
-        for edge in netx.edges(data = True):
+        for edge in netx.edges(data=True):
             print edge
 
         return netx
