@@ -45,11 +45,11 @@ class GraphConverter:
         # subtract the coordinate values of the two points
         delta = tuple(numpy.subtract(destination_cord, start_cord))
         # the difference in position is squared  
-        numpy.square(delta)
+        delta = numpy.square(delta)
         # extract values from delta tuple
         deltax, deltay = delta
         # cost is the summation of the difference in x and y
-        weight = pow(deltax, 2) + pow(deltay, 2)
+        weight = deltax + deltay
 
         #add edge to graph
         g.add_edge(start, destination, weight=weight)
