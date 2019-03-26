@@ -49,9 +49,9 @@ class GraphConverter:
         # extract values from delta tuple
         deltax, deltay = delta
         # cost is the summation of the difference in x and y
-        weight = deltax + deltay
+        weight = pow(deltax, 2) + pow(deltay, 2)
 
         #add edge to graph
-        g.add_edge(start, destination, weight = weight)
+        g.add_edge(start, destination, weight=weight)
 
 
