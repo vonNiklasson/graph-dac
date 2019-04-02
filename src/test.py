@@ -2,9 +2,9 @@ from GraphConverter import GraphConverter as gc
 from GraphSolver import GraphSolver
 from GraphPrinter import GraphPrinter
 
-from graphs import hossein
+from graphs import triangle
 
-g = gc.from_dict(hossein)
+g = gc.from_dict(triangle)
 
 gs = GraphSolver()
 
