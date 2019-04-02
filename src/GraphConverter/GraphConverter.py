@@ -36,8 +36,8 @@ class GraphConverter:
 
         return netx
 
-    @classmethod
-    def add_edge(cls, g, start, destination):
+    @staticmethod
+    def add_edge(g, start, destination):
         # find start & end coordinates
         start_cord = g.node[start]['coordinates']
         destination_cord = g.node[destination]['coordinates']
