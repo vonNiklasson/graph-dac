@@ -94,7 +94,7 @@ class GraphSolver:
                 # Make sure the graph is connected
                 if nx.is_connected(self._copy):
                     # Solve the problem
-                    result = consensus_average(self._copy)
+                    result = self.consensus_average(self._copy)
                     # If the new result yields a better result, store it instead
                     if result["iterations"] < optimal_graph_list[edge_count]:
                         optimal_graph_list[edge_count] = result["iterations"]
@@ -114,15 +114,15 @@ class GraphSolver:
         graph = copy.deepcopy(g)
 
         counter = 0
-        deviance = graph_deviance(graph)
+        deviance = self.graph_deviance(graph)
 
         while self._deviance < deviance:
             # increment counter
             counter += 1
             # update values based on average value of neighboring
-            update_values(graph)
+            self.update_values(graph)
             # update deviance
-            deviance = graph_deviance(graph)
+            deviance = self.graph_deviance(graph)
         
             if counter > self._max_iterations:
                 return False, counter, deviance
@@ -134,16 +134,16 @@ class GraphSolver:
         }
 
 
-    def graph_deviance(g):
+    def graph_deviance(self, g):
         node_min = float('Inf')
         node_max = float('-Inf')
         for node in g.nodes(data = True):
-            node_min = (node_min, node['value'])
-            node_max = (node_min, node['value'])
+            node_min = min(node_min, node[1]['value'])
+            node_max = max(node_max, node[1]['value'])
 
         return node_max - node_min
 
-    def update_values(g):
+    def update_values(self, g):
         new_values = []
         nodes = g.nodes()
 
