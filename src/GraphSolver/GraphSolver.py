@@ -86,6 +86,7 @@ class GraphSolver:
                             dfs(node_id, next_node + 1, edge_count + 1)
                             print "removing " + str(node_id) + " " + str(next_node)
                             print self._copy.has_edge(node_id, next_node)
+                            
                             # Remove that neighbour and try with another one
                             self._copy.remove_edge(node_id, next_node)
 
