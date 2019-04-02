@@ -69,23 +69,20 @@ class GraphSolver:
                 dfs(node_id + 1, node_id + 2, edge_count)
 
                 if self._copy.has_node(neighbour_id):
-                    # Iterate over all increasing neighbours
-                    nodes = list(iter(self._copy.nodes()))
-                    nodes = nodes[node_id:]
-                    for next_node in nodes:
+                    for next_node in list(iter(self._copy.nodes())):
                         if next_node >= neighbour_id:
                             # Make sure that it doesn't already exists an edge there.
                             # If there would already be an edge, it's supposed to be there and won't be deleted.
-                            if g.has_edge(node_id, next_node):
+                            if self._copy.has_edge(node_id, next_node):
                                 continue
 
                             # Add edge between node_id and next_node
-                            print str(node_id) + " " + str(next_node)
+                            print "Add: " + str(node_id) + "-" + str(next_node)
                             gc.add_edge(self._copy, node_id, next_node)
                             # Iterate over next adding neighbour
                             dfs(node_id, next_node + 1, edge_count + 1)
-                            print "removing " + str(node_id) + " " + str(next_node)
-                            print self._copy.has_edge(node_id, next_node)
+                            print "Del: " + str(node_id) + "-" + str(next_node)
+                            print "Has: " + str(self._copy.has_edge(node_id, next_node))
                             # Remove that neighbour and try with another one
                             self._copy.remove_edge(node_id, next_node)
 
