@@ -83,7 +83,7 @@ class GraphSolver:
                             # Iterate over next adding neighbour
                             dfs(node_id, next_node + 1, edge_count + 1)
                             # print "Del: " + str(node_id) + "-" + str(next_node) + ", " + str(self._copy.has_edge(node_id, next_node))
-                            
+
                             # Remove that neighbour and try with another one
                             self._copy.remove_edge(node_id, next_node)
 
@@ -94,6 +94,7 @@ class GraphSolver:
                     # Solve the problem
                     result = self.consensus_average(self._copy)
                     # If the new result yields a better result, store it instead
+
                     if result["iterations"] < optimal_graph_list[edge_count] or \
                       (result["iterations"] == optimal_graph_list[edge_count] and result["deviance"] < deviance_graph_list[edge_count]):
                         optimal_graph_list[edge_count] = result["iterations"]
