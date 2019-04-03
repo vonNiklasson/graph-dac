@@ -26,13 +26,7 @@ class GraphConverter:
         for origin, destinations in edges.items():
             for destination in destinations:
                 GraphConverter.add_edge(netx, origin, destination)
-                print origin, destination
-
-        for node in netx.nodes(data=True):
-            print node
-        
-        for edge in netx.edges(data=True):
-            print edge
+                #print origin, destination
 
         return netx
 
