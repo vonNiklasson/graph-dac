@@ -175,14 +175,17 @@ class GraphSolver:
             deviance = self.graph_deviance(graph)
         
             if counter > self._max_iterations:
-                return False, counter, deviance
+                return {
+                    "Success": False,
+                    "iterations": counter,
+                    "deviance": deviance
+                }
 
-        return{
+        return {
             "Success": True,
             "iterations": counter,
             "deviance": deviance
         }
-
 
     def graph_deviance(self, g):
         node_min = float('Inf')
@@ -198,12 +201,15 @@ class GraphSolver:
         nodes = g.nodes()
 
         for id in nodes:
-            temp = g[id]['value']
-            for neighbor in g.neighbor(id):
-                temp += g[id]['value']
+            temp = g.node[id]['value']
+            neighbours = 0
+            for neighbor in g[id]:
+                temp += g.nodes[id]['value']
+                neighbours = neighbours + 1
+            temp = temp / (neighbours + 1)
             new_values.append(temp)
 
         for node, new_value in map(None, nodes, new_values):
-            g[node]['value'] = new_value
+            g.node[node]['value'] = new_value
 
 
