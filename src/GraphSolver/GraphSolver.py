@@ -39,12 +39,10 @@ class GraphSolver:
         # Store a graph list with possible solutions
         graph_list = {}
         optimal_graph_list = {}
-        deviance_graph_list = {}
         for possible_edge_count in range(self._min_edges, self._max_edges+1):
             graph_list[possible_edge_count] = None
             # Set a large number to compare to later
             optimal_graph_list[possible_edge_count] = float('inf')
-            deviance_graph_list[possible_edge_count] = float('inf')
 
         # Get the smallest and largest id of the nodes
         min_node = next(iter(g.nodes()))
@@ -92,20 +90,17 @@ class GraphSolver:
                 # Make sure the graph is connected
                 if nx.is_connected(self._copy):
                     # Solve the problem
-                    result = self.consensus_average(self._copy)
                     # If the new result yields a better result, store it instead
+                    convergence_rate = self.convergence_rate(self._copy)
 
-                    if result["iterations"] < optimal_graph_list[edge_count] or \
-                      (result["iterations"] == optimal_graph_list[edge_count] and result["deviance"] < deviance_graph_list[edge_count]):
-                        optimal_graph_list[edge_count] = result["iterations"]
-                        deviance_graph_list[edge_count] = result["deviance"]
+                    if convergence_rate < optimal_graph_list[edge_count]:
+                        optimal_graph_list[edge_count] = convergence_rate
                         graph_list[edge_count] = copy.deepcopy(self._copy)
 
         dfs(min_node, min_node + 1, current_edge_count)
 
         return {
-            "iterations": optimal_graph_list,
-            "deviances": deviance_graph_list,
+            "convergence_rate": optimal_graph_list,
             "graphs": graph_list
         }
 
@@ -160,6 +155,12 @@ class GraphSolver:
                 else:
                     m2 = x
         return m2 if count >= 2 else None
+
+    @staticmethod
+    def convergence_rate(g):
+        A = GraphSolver.get_neighbour_matrix(g)
+        ev = GraphSolver.get_eigenvalues(A)
+        return GraphSolver.second_largest(ev)
 
     def consensus_average(self, g):
         graph = copy.deepcopy(g)
