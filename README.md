@@ -18,14 +18,14 @@ Either add nodes one by one by one or all together with either of the following 
 #### Adding nodes one by one
 ```python
 network.add_node(<node_id_1>, <node_value_1>)
-network.add_node(<node_id_1>, <node_value_2>)
+network.add_node(<node_id_2>, <node_value_2>)
 ```
 
 #### Adding multiple nodes
 ```python
 nodes = {
     node_id_1: node_value_1,
-    node_id_1: node_value_2,
+    node_id_2: node_value_2,
     ...
 }
 
